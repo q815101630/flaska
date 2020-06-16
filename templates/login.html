@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+
+{% block title %}Login{% endblock %}
+
+{% block page_content %}
+  <div class='page-header'>
+    <h1>Login</h1>
+  </div>
+  <div class='col-md-4'>
+    {{ quick_form(form) }}
+    <br>
+    <p>忘记密码？ <a href="{{ url_for('user.before_reset_password') }}">
+        点击此处重置密码</a></p>
+    <p>新用户？ <a href="{{ url_for('front.register') }}">
+        点击此处注册账号</a></p>
+  </div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% from 'bootstrap/wtf.html' import quick_form %} {%
+from '_macros.html' import render_pagination %} {% block title %}Weblog{%
+endblock %} {% block page_content %}
+<div class="page-header">
+  <h1>
+    Hello {% if current_user.name %}{{ current_user.name }}{% else %}Stranger{%
+    endif %}
+  </h1>
+  <br />
+  <!-- 渲染编辑博客的表单 START -->
+  {% if current_user.is_authenticated %}
+  <!-- p>最近登录：{#{ moment(current_user.last_seen, local=True).fromNow(refresh=True) }#}</p><br -->
+  <div>
+    {{ quick_form(form) }}
+  </div>
+  <br />
+  {% endif %}
+  <!-- 渲染编辑博客的表单 END -->
+</div>
+<!-- 显示本页博客列表 -->
+{% include '_blogs.html' %}
+<!-- 显示分页 -->
+{{render_pagination(pagination, 'front.index')}} {% endblock %} {% block scripts
+%} {{super()}}
+<!-- Markdown 预览是由 Flask-PageDown 模块支持的，加入此模板宏即可实现 -->
+{{pagedown.include_pagedown()}} {% endblock %}

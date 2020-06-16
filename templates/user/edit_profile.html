@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block page_content %}
+  <div class='page-header'>
+    <h2>编辑个人信息</h2>
+  </div>
+  <div class='col-md-4'>
+    {{quick_form(form)}}
+  </div>
+{% endblock %}

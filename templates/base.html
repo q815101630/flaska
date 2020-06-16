@@ -1,0 +1,90 @@
+{% extends 'bootstrap/base.html' %} {% block title %}{% endblock %} {% block head %} {{ super() }}
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+<!-- 下面这一行是新增代码，引入自定义的样式表美化页面 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+  <div class="container">
+    <!-- 导航栏左侧的网站标识 START -->
+    <div class="navbar-header">
+      <button
+        type="button"
+        class="navbar-toggle"
+        data-toggle="collapse"
+        data-target=".navbar-collapse"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">LuMe_Log</a>
+    </div>
+    <!-- 导航栏左侧的网站标识 END -->
+    <div class="navbar-collapse collapse">
+      <!-- 导航栏左侧的按钮 START -->
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+      </ul>
+      <!-- 导航栏左侧的按钮 END -->
+
+            <!-- 导航栏右侧的下拉菜单 START -->
+      <ul class="nav navbar-nav navbar-right">
+        {% if not current_user.is_authenticated %}
+        <li><a href="{{ url_for('front.register') }}">注册</a></li>
+        <li><a href="{{ url_for('front.login') }}">登录</a></li>
+        {% else %}
+        <li class="dropdown">
+          <a
+            href="#"
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            {{ current_user.name }}<span class="caret"></span
+          ></a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="{{ url_for('user.index', name=current_user.name) }}">
+                个人主页</a
+              >
+            </li>
+            <li role="separator" class="divider"></li>
+            <!-- 去掉注释即可 -->
+            <li><a href="{{ url_for('user.change_password') }}"> 修改密码</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/logout">退出登录</a></li>
+          </ul>
+          {% endif %}
+        </li>
+      </ul>
+
+<!-- 导航栏右侧的下拉菜单 END -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- 显示页面顶部的 flash 消息 START -->
+  {% for category, message in get_flashed_messages(with_categories=true) %}
+  <div class="alert alert-{{ category }} alert-dismissble" role="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+  </div>
+  {% endfor %}
+  <!-- 显示页面顶部的 flash 消息 END -->
+  {% block page_content %} {% endblock %}
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+  {{ super() }}
+  {{ moment.include_moment() }}
+  {{ moment.lang('zh-cn') }}
+{% endblock %}

@@ -1,0 +1,81 @@
+<ul class="posts">
+  {%- for blog in blogs -%}
+  <li class="post" style="list-style-type:none;">
+    <div class="post-thumbnail">
+      <!-- 博客作者的头像，链接到作者主页 -->
+      <a
+        href="{{ url_for('user.index', name=blog.author.name) }}"
+        target="_blank"
+        ><img
+          class="img-rounded profile-thumbnail"
+          src="{{ blog.author.small_avatar_hash }}"
+        />
+      </a>
+    </div>
+
+    <br />
+    <div class="post-content">
+      <!-- 博客发布时间 -->
+      <div class="post-date">
+        {{ moment(blog.time_stamp, local=True).fromNow() }}
+      </div>
+      <div class="post-author">
+        <!-- 博客作者的名字，链接到作者主页 -->
+        <a
+          href="{{ url_for('user.index', name=blog.author.name) }}"
+          target="_blank"
+          >{{ blog.author.name }}</a
+        >
+      </div>
+      <!-- 博客内容展示 -->
+      <div class="post-body">
+        <!-- 如果存在 HTML 格式的数据，则渲染之
+               Jinja2 会将 HTML 格式的数据转义为普通字符
+               使用 safe 过滤器阻止 Jinja2 的转义以呈现 HTML 样式 -->
+        {% if blog.body_html %} {{ blog.body_html | safe }} {% else %} {{
+        blog.body }} {% endif %}
+      </div>
+
+      <div class="post-footer">
+  <!-- 博客专属链接 -->
+  {% if not hidebloglink %}
+  <a href="{{ url_for('front.blog', id=blog.id) }}" target="_blank">
+    <span class="label label-primary">BlogLink</span>
+  </a>
+  {% endif %}
+  <!-- 博客作者的编辑按钮 -->
+  {% if current_user == blog.author %}
+  <a
+    href="{{ url_for('user.edit_blog', id=blog.id) }}"
+    {%
+    if
+    not
+    noblank
+    %}target="_blank"
+    {%
+    endif
+    %}
+  >
+    <span class="label label-success">Edit</span>
+  </a>
+  <!-- 管理员的编辑按钮 -->
+  {% elif current_user.is_administrator %}
+  <a
+    href="{{ url_for('user.edit_blog', id=blog.id) }}"
+    {%
+    if
+    not
+    noblank
+    %}target="_blank"
+    {%
+    endif
+    %}
+  >
+    <span class="label label-danger">AdminEdit</span>
+  </a>
+  {% endif %}
+    </div>
+  </li>
+  <hr />
+  {% endfor %}
+</ul>
