@@ -1,2 +1,2 @@
 # flaska
-A simple Flaska web app
+A simple Flask web app
